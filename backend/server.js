@@ -8,14 +8,10 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/todo-app', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
+mongoose.connect('mongodb://localhost:27017/todo-app')
+.then(() => {
   console.log('Connected to MongoDB');
-}).catch((err) => {
-  console.error('MongoDB connection error:', err);
-});
+})
 
 // Create a schema for To-Do items
 const todoSchema = new mongoose.Schema({
@@ -38,9 +34,11 @@ app.get('/todos', async (req, res) => {
 
 // API route to create a new todo
 app.post('/todos', async (req, res) => {
+    const {text}=req.body;
   const todo = new Todo({
-    text: req.body.text,
-    completed: false
+    text: text,
+    completed: false,
+
   });
   try {
     const newTodo = await todo.save();
